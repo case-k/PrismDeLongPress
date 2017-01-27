@@ -40,6 +40,10 @@ namespace PrismDeLongPress.Droid.Effects
             if (renderer?.Element != null)
             { 
                 _view.LongClick -= OnLongClick;
+                if (_view is Android.Widget.ListView)
+                {
+                    (_view as Android.Widget.ListView).ItemLongClick -= OnItemLongClick;
+                }
             }
             _command = null;
             _commandParameter = null;
@@ -74,6 +78,10 @@ namespace PrismDeLongPress.Droid.Effects
 
             _view.LongClick += OnLongClick;
 
+            if (_view is Android.Widget.ListView)
+            {
+                (_view as Android.Widget.ListView).ItemLongClick += OnItemLongClick;
+            }
         }
 
         void UpdateCommandParameter()
@@ -83,6 +91,19 @@ namespace PrismDeLongPress.Droid.Effects
 
 
         void OnLongClick(object sender, Android.Views.View.LongClickEventArgs e)
+        {
+            if (_command == null)
+            {
+                e.Handled = false;
+                return;
+            }
+
+            _command?.Execute(_commandParameter ?? Element);
+
+            e.Handled = true;
+        }
+
+        void OnItemLongClick(object sender, AdapterView.ItemLongClickEventArgs e)
         {
             if (_command == null)
             {
