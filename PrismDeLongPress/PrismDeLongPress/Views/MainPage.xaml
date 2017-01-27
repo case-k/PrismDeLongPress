@@ -20,6 +20,14 @@
         </TableSection>
       </TableRoot>
     </TableView>
+  
+      <ListView ItemsSource="{Binding ListItems}" controls:LongPressEffect.Enabled="true" controls:LongPressEffect.Command="{Binding ListPressCommand}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <TextCell Text="{Binding Title}" Detail="{Binding Detail}" />
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
   </StackLayout>
   
 </ContentPage>
