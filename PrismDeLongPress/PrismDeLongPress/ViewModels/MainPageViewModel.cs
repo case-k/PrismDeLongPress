@@ -1,35 +1,29 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Prism.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace PrismDeLongPress.ViewModels
 {
-    public class MainPageViewModel : BindableBase, INavigationAware
+    public class MainPageViewModel : BindableBase
     {
-        private string _title;
-        public string Title
+        private IPageDialogService _pageDialogService;
+
+        public ICommand LabelPressCommand { get; }
+        public ICommand EntryPressCommand { get; }
+        public ICommand TablePressCommand { get; }
+
+        public MainPageViewModel(IPageDialogService PageDialogService)
         {
-            get { return _title; }
-            set { SetProperty(ref _title, value); }
-        }
+            _pageDialogService = PageDialogService;
 
-        public MainPageViewModel()
-        {
-
-        }
-
-        public void OnNavigatedFrom(NavigationParameters parameters)
-        {
-
-        }
-
-        public void OnNavigatedTo(NavigationParameters parameters)
-        {
-            if (parameters.ContainsKey("title"))
-                Title = (string)parameters["title"] + " and Prism";
+            LabelPressCommand = new DelegateCommand(async () => { await _pageDialogService.DisplayAlertAsync("Label", "Long Pressed", "OK"); } );
+            EntryPressCommand = new DelegateCommand(async () => { await _pageDialogService.DisplayAlertAsync("Entry", "Long Pressed", "OK"); });
+            TablePressCommand = new DelegateCommand(async () => { await _pageDialogService.DisplayAlertAsync("Table", "Long Pressed", "OK"); });
         }
     }
 }

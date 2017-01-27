@@ -1,5 +1,6 @@
 ﻿using Prism.Unity;
 using PrismDeLongPress.Views;
+using Xamarin.Forms;
 
 namespace PrismDeLongPress
 {
@@ -11,11 +12,12 @@ namespace PrismDeLongPress
         {
             InitializeComponent();
 
-            NavigationService.NavigateAsync("MainPage?title=Hello%20from%20Xamarin.Forms");
+            NavigationService.NavigateAsync("NavigationPage/MainPage");
         }
 
         protected override void RegisterTypes()
         {
+            Container.RegisterTypeForNavigation<NavigationPage>();
             Container.RegisterTypeForNavigation<MainPage>();
         }
     }

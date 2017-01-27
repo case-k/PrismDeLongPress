@@ -2,10 +2,24 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:controls="clr-namespace:PrismDeLongPress.Controls;assembly=PrismDeLongPress"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="PrismDeLongPress.Views.MainPage"
              Title="MainPage">
+  
   <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-    <Label Text="{Binding Title}" />
+    <Label Text="Label" controls:LongPressEffect.Enabled="true" controls:LongPressEffect.Command="{Binding LabelPressCommand}" />
+    <Entry Text="Entry" controls:LongPressEffect.Enabled="true" controls:LongPressEffect.Command="{Binding EntryPressCommand}" />
+
+    <TableView controls:LongPressEffect.Enabled="true" controls:LongPressEffect.Command="{Binding TablePressCommand}">
+      <TableRoot>
+        <TableSection Title="TableView">
+          <TextCell Text="TextCell" />
+          <EntryCell Text="EntryCell" />
+          <SwitchCell Text="SwitchCell" />
+        </TableSection>
+      </TableRoot>
+    </TableView>
   </StackLayout>
+  
 </ContentPage>
