@@ -9,19 +9,27 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using System.Windows.Input;
 
 namespace PrismDeLongPress.Droid.Effects
 {
     internal class LongPressGestureListener : GestureDetector.SimpleOnGestureListener
     {
-        public View TargetView { private get; set; }
+        public ICommand Command { private get; set; }
+        public object CommandParameter { private get; set; }
+        public Android.Views.View View { private get; set; }
 
 
         public override void OnLongPress(MotionEvent e)
         {
             base.OnLongPress(e);
 
+            if (Command == null)
+            {
+                return;
+            }
 
+            Command?.Execute(CommandParameter ?? View);
         }
     }
 }

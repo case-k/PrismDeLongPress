@@ -6,12 +6,12 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="PrismDeLongPress.Views.MainPage"
              Title="MainPage">
-  
-  <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-    <Label Text="Label" controls:LongPressEffect.Enabled="true" controls:LongPressEffect.Command="{Binding LabelPressCommand}" />
-    <Entry Text="Entry" controls:LongPressEffect.Enabled="true" controls:LongPressEffect.Command="{Binding EntryPressCommand}" />
 
-    <TableView controls:LongPressEffect.Enabled="true" controls:LongPressEffect.Command="{Binding TablePressCommand}">
+  <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+    <Label Text="Label" controls:LongPressEffect.Enabled="false" controls:LongPressEffect.Command="{Binding LabelPressCommand}" />
+    <Entry Text="Entry" controls:LongPressEffect.Enabled="false" controls:LongPressEffect.Command="{Binding EntryPressCommand}" />
+
+    <TableView controls:LongPressEffect.Enabled="false" controls:LongPressEffect.Command="{Binding TablePressCommand}">
       <TableRoot>
         <TableSection Title="TableView">
           <TextCell Text="TextCell" />
@@ -20,6 +20,14 @@
         </TableSection>
       </TableRoot>
     </TableView>
+
+    <ListView ItemsSource="{Binding ListItems}" controls:LongPressEffect.Enabled="true" controls:LongPressEffect.Command="{Binding ListPressCommand}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <TextCell Text="{Binding Title}" Detail="{Binding Detail}" />
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
   </StackLayout>
-  
+
 </ContentPage>

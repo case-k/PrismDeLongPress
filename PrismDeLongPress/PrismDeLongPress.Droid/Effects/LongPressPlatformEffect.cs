@@ -14,6 +14,7 @@ using PrismDeLongPress.Droid.Effects;
 using Xamarin.Forms.Platform.Android;
 using System.Windows.Input;
 using PrismDeLongPress.Controls;
+using Android.Text.Method;
 
 [assembly: ExportEffect(typeof(LongPressPlatformEffect), "LongPressEffect")]
 
@@ -21,29 +22,28 @@ namespace PrismDeLongPress.Droid.Effects
 {
     class LongPressPlatformEffect : PlatformEffect
     {
-        private ICommand _command;
-        private object _commandParameter;
-        private Android.Views.View _view;
+        private LongPressGestureListener _listener;
+        private GestureDetector _detector;
+
 
         protected override void OnAttached()
         {
-            _view = Control ?? Container;
+            _listener = new LongPressGestureListener();
+            _detector = new GestureDetector(_listener);
+
+            var view = Control ?? Container;
+            view.GenericMotion += (s, a) => _detector.OnTouchEvent(a.Event);
+            view.Touch += (s, a) => _detector.OnTouchEvent(a.Event);
+            _listener.View = view;
 
             UpdateCommand();
             UpdateCommandParameter();
         }
 
-
         protected override void OnDetached()
         {
-            var renderer = Container as IVisualElementRenderer;
-            if (renderer?.Element != null)
-            { 
-                _view.LongClick -= OnLongClick;
-            }
-            _command = null;
-            _commandParameter = null;
-            _view = null;
+            _detector.Dispose();
+            _listener.Dispose();
         }
 
         protected override void OnElementPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
@@ -62,38 +62,12 @@ namespace PrismDeLongPress.Droid.Effects
 
         void UpdateCommand()
         {
-            if (_command != null)
-            {
-                _view.LongClick -= OnLongClick;
-            }
-            _command = LongPressEffect.GetCommand(Element);
-            if (_command == null)
-            {
-                return;
-            }
-
-            _view.LongClick += OnLongClick;
-
+            _listener.Command = LongPressEffect.GetCommand(Element);
         }
 
         void UpdateCommandParameter()
         {
-            _commandParameter = LongPressEffect.GetCommandParameter(Element);
+            _listener.CommandParameter = LongPressEffect.GetCommandParameter(Element);
         }
-
-
-        void OnLongClick(object sender, Android.Views.View.LongClickEventArgs e)
-        {
-            if (_command == null)
-            {
-                e.Handled = false;
-                return;
-            }
-
-            _command?.Execute(_commandParameter ?? Element);
-
-            e.Handled = true;
-        }
-
     }
 }
